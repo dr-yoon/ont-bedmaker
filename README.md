@@ -14,7 +14,7 @@ The tool also outputs key statistics — total target region size, genome covera
 
 
 
-## Key Features
+## Features
 
 - Pre-download required: **Ensembl** GTFs:
   [[hg38 (GRCh38 release-115)](https://ftp.ensembl.org/pub/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh38.115.gtf.gz)] or 
