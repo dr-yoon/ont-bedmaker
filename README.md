@@ -48,3 +48,28 @@ The tool also outputs key statistics — total target region size, genome covera
   --mt-name MT \
   --add-chr \
   --stats-out target_bed_stats.txt
+```
+
+## Command options
+| Option         | Description                                         |
+| -------------- | --------------------------------------------------- |
+| `-g`           | Path to gzipped Ensembl/Gencode GTF file            |
+| `-t`           | Text file with one gene symbol per line             |
+| `-o`           | Output BED file (merged, non-overlapping)           |
+| `-b`           | Buffer size (bp) around genes *(default: 100000)*   |
+| `--genome`     | Genome build: `hg38` *(default)* or `hg19`          |
+| `--include-mt` | Add full mitochondrial genome (0–16569 bp)          |
+| `--mt-name`    | Name of mtDNA chromosome *(default: MT)*            |
+| `--add-chr`    | Add `chr` prefix to chromosomes (e.g. `1 → chr1`)   |
+| `--stats-out`  | Output stats file *(default: target_bed_stats.txt)* |
+| `--version`    | Print version and exit                              |
+| `-h, --help`   | Show usage and exit                                 |
+
+
+
+## Output files
+| File                        | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| `target_regions_merged.bed` | Final merged BED regions for ONT adaptive sampling           |
+| `target_bed_stats.txt`      | Text summary with counts, total bp, coverage, and parameters |
+
