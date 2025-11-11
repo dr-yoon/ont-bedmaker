@@ -3,7 +3,6 @@
 ## Test Input
 **File:** `actionable_PGx_genes.txt (44 genes)`  
 **Genome:** `hg38`
-**Include MT:** `No`  
 **Add "chr" prefix:** `Yes`  
 **Output:** `actionable_PGx_targets_hg38.bed`  
 
