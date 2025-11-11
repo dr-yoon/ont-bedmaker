@@ -1,0 +1,15 @@
+┌────────────────────────────────────────────────────────────┐
+│                    ont-bedmaker v1.0.0                     │
+│     Target region BED generator for ONT adaptive sampling  │
+└────────────────────────────────────────────────────────────┘
+Date: 2025. 11. 11. (화) 15:36:31 KST
+----------------------------------
+GTF: Homo_sapiens.GRCh37.87.gtf.gz
+Gene list: actionable_PGx_genes.txt
+Unique genes: 39
+Buffer size: 100000
+
+Output BED: actionable_PGx_targets_hg19.bed
+Total region size (bp): 10052052
+Genome coverage: 0.3247 %
+----------------------------------
