@@ -12,7 +12,7 @@ It reads **Ensembl GTF annotations**, extracts **target gene loci**, applies **u
 The result is a clean, non-overlapping **BED file** that can be directly used for adaptive sampling experiments or other targeted long-read applications.
 The tool also outputs key statistics — total target region size, genome coverage, and gene count — in a formatted report.
 
----
+
 
 ## Key Features
 
@@ -24,7 +24,7 @@ The tool also outputs key statistics — total target region size, genome covera
 - Produces a readable **summary file with all parameters and statistics**
 - Simple, dependency-light (Bash + awk + gzip)
 
----
+
 
 ## Requirements
 
@@ -33,7 +33,7 @@ The tool also outputs key statistics — total target region size, genome covera
 - `awk`  
 - `gzip`
 
----
+
 
 ## Usage
 
