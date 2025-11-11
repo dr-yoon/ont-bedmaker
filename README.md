@@ -14,19 +14,19 @@ The tool also outputs key statistics — total target region size, genome covera
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 🧩 Pre-download required: **Ensembl** GTFs
+- Pre-download required: **Ensembl** GTFs
   *(e.g. `Homo_sapiens.GRCh38.gtf.gz`, `Homo_sapiens.GRCh37.gtf.gz`)*
-- ⚙️ Generates **non-overlapping merged BED** regions suitable for ONT adaptive sampling
-- 🧠 Reports **target size**, **coverage**, and **unique gene count**
-- 🧬 Optionally includes the **mitochondrial genome**
-- 🧾 Produces a readable **summary file with all parameters and statistics**
-- 🧩 Simple, dependency-light (Bash + awk + gzip)
+- Generates **non-overlapping merged BED** regions suitable for ONT adaptive sampling
+- Reports **target size**, **coverage**, and **unique gene count**
+- Optionally includes the **mitochondrial genome**
+- Produces a readable **summary file with all parameters and statistics**
+- Simple, dependency-light (Bash + awk + gzip)
 
 ---
 
-## 🧰 Requirements
+## Requirements
 
 - Linux or macOS
 - Bash v4 or higher  
@@ -35,7 +35,7 @@ The tool also outputs key statistics — total target region size, genome covera
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ```bash
 ./ont-bedmaker.sh \
