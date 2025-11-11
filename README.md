@@ -20,7 +20,7 @@ The tool also outputs key statistics — total target region size, genome covera
   [[hg38 (GRCh38 release-115)](https://ftp.ensembl.org/pub/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh38.115.gtf.gz)] or 
   [[hg19 (GRCh37 release-87)](https://ftp.ensembl.org/pub/grch37/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh37.87.gtf.gz)]
 - Generates **non-overlapping merged BED** regions suitable for ONT adaptive sampling
-- Reports **target size**, **coverage**, and **unique gene count**
+- Reports **target size**, **genome coverage (%)**, and **unique gene count**
 - Optionally includes the **mitochondrial genome**
 - Produces a readable **summary file with all parameters and statistics**
 - Simple, dependency-light (Bash + awk + gzip)
