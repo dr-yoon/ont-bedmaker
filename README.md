@@ -16,9 +16,10 @@ The tool also outputs key statistics — total target region size, genome covera
 
 ## Features
 
-- Pre-download required: **Ensembl** GTFs:
-  [[hg38 (GRCh38 release-115)](https://ftp.ensembl.org/pub/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh38.115.gtf.gz)] or 
-  [[hg19 (GRCh37 release-87)](https://ftp.ensembl.org/pub/grch37/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh37.87.gtf.gz)]
+- Pre-download required: Gene annotation GTF/GFF files
+  [[hg38 (GRCh38 release-115)](https://ftp.ensembl.org/pub/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh38.115.gtf.gz)], 
+  [[hg19 (GRCh37 release-87)](https://ftp.ensembl.org/pub/grch37/release-115/gtf/homo_sapiens/Homo_sapiens.GRCh37.87.gtf.gz)],
+  [[chm13 (T2T-CHM13v2.0)](https://s3-us-west-2.amazonaws.com/human-pangenomics/T2T/CHM13/assemblies/annotation/chm13v2.0_RefSeq_Liftoff_v5.2.gff3.gz)]
 - Generates **non-overlapping merged BED** regions suitable for ONT adaptive sampling
 - Reports **target size**, **genome coverage (%)**, and **unique gene count**
 - Optionally includes the **mitochondrial genome**
@@ -54,11 +55,11 @@ The tool also outputs key statistics — total target region size, genome covera
 ## Command options
 | Option         | Description                                         |
 | -------------- | --------------------------------------------------- |
-| `-g`           | Path to gzipped Ensembl/Gencode GTF file            |
+| `-g`           | Path to gzipped gene annotation GTF/GFF file        |
 | `-t`           | Text file with one gene symbol per line             |
 | `-o`           | Output BED file (merged, non-overlapping)           |
 | `-b`           | Buffer size (bp) around genes *(default: 100000)*   |
-| `--genome`     | Genome build: `hg38` *(default)* or `hg19`          |
+| `--genome`     | Genome build: `hg38` *(default)*, `hg19`, or `chm13`|
 | `--include-mt` | Add full mitochondrial genome (0–16569 bp)          |
 | `--mt-name`    | Name of mtDNA chromosome *(default: MT)*            |
 | `--add-chr`    | Add `chr` prefix to chromosomes (e.g. `1 → chr1`)   |
