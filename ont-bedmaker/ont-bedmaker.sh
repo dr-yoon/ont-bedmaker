@@ -4,11 +4,11 @@
 # MIT License
 #
 #┌────────────────────────────────────────────────────────────┐
-#│                    ont-bedmaker v1.0.0                     │
+#│                    ont-bedmaker v1.1.0                     │
 #│     Target region BED generator for ONT adaptive sampling  │
 #└────────────────────────────────────────────────────────────┘
 # Description:
-#   Reads a target gene list and an Ensembl GTF (gzipped), extracts gene loci,
+#   Reads a target gene list and an Gene annotation GTF/GFFs, extracts gene loci,
 #   applies a user-defined buffer, merges overlaps (concatenating gene names),
 #   optionally appends the full mitochondrial chromosome, and writes:
 #     - a merged BED (final targets, non-overlapping)
@@ -17,7 +17,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-VERSION="1.0.0"
+VERSION="1.1.0"
 
 usage() {
   cat <<'EOF'
@@ -27,21 +27,21 @@ Usage:
     -t target_gene_list.txt \
     -o targets_buffered_merged.bed \
     [-b 100000] \
-    [--genome {hg38|hg19}] \
+    [--genome {hg38|hg19|chm13}] \
     [--include-mt] \
     [--mt-name MT] \
     [--add-chr] \
     [--stats-out target_bed_stats.txt]
 
 Options:
-  -g                Path to gzipped Ensembl/Gencode GTF
+  -g                Path to gzipped Gene annotation GTF/GFF (pre-download)
   -t                Text file with one gene name per line (HGNC symbols)
   -o                Output BED (merged, non-overlapping)
   -b                Buffer size (bp) around genes [default: 100000]
-  --genome          Genome build: hg38 (default) or hg19
+  --genome          Genome build: hg38 (default), hg19, or chm13
   --include-mt      Append full mitochondrial chromosome
   --mt-name         mtDNA chromosome name [default: MT]
-  --add-chr         Add "chr" prefix to all chromosome names (e.g. 1→chr1, MT→chrMT)
+  --add-chr         Add "chr" prefix to all chromosome names (e.g. 1 → chr1, MT → chrMT)
   --stats-out       Save summary stats here [default: target_bed_stats.txt]
   -h, --help        Show help and exit
   --version         Print version and exit
@@ -94,27 +94,43 @@ printf "Date: %s\n\n" "$(date)"
 GENE_COUNT=$(awk 'NF>0{g[$1]=1} END{print length(g)}' "$TARGET")
 
 # --- extract gene intervals ---
-awk -v OFS='\t' -v BUF="$BUFFER" -v addchr="$ADD_CHR" '
+awk -v OFS='\t' -v BUF="$BUFFER" -v addchr="$ADD_CHR" -v genome="$GENOME" '
   FNR==NR {
     g=$1; sub(/\r$/,"",g); gsub(/^[ \t]+|[ \t]+$/, "", g)
     if (g!="") targets[g]=1
     next
   }
+
+  $0 ~ /^#/ { next }
+
   $3=="gene" {
-    if (match($0, /gene_name "([^"]+)"/, m)) name=m[1]
-    else if (match($0, /gene_id "([^"]+)"/, m2)) name=m2[1]
-    else next
+    chrom=$1
+    if (addchr && chrom !~ /^chr/) chrom="chr"chrom
+
+    start=$4; end=$5
+    bedstart=start-1
+    bstart=bedstart-BUF; if (bstart<0) bstart=0
+    bend=end+BUF
+
+    name=""
+
+    if (genome=="chm13") {
+      # CHM13 Liftoff GFF3: attributes are key=value;... and we want gene_name=SYMBOL
+      if (match($9, /(^|;)gene_name=([^;]+)/, m)) name=m[2]
+      else next
+    } else {
+      # Ensembl/Gencode GTF
+      if (match($0, /gene_name "([^"]+)"/, m)) name=m[1]
+      else if (match($0, /gene_id "([^"]+)"/, m2)) name=m2[1]
+      else next
+    }
+
     if (name in targets) {
-      chrom=$1
-      if (addchr && chrom !~ /^chr/) chrom="chr"chrom
-      start=$4; end=$5
-      bedstart=start-1
-      bstart=bedstart-BUF; if (bstart<0) bstart=0
-      bend=end+BUF
       print chrom,bstart,bend,name
     }
   }
 ' "$TARGET" <(gzip -dc "$GTF") > "$tmp_raw"
+
 
 if [ ! -s "$tmp_raw" ]; then
   echo "Warning: No matching genes found. Check gene list and GTF naming."
@@ -144,8 +160,15 @@ awk -v OFS='\t' '
 # --- add MT if requested ---
 if [ "$INCLUDE_MT" -eq 1 ]; then
   MTCHR="$MT_NAME"
+
   if [ "$ADD_CHR" -eq 1 ]; then
-    [[ "$MTCHR" =~ ^chr ]] || MTCHR="chr${MTCHR}"
+    if [ "$MTCHR" = "MT" ]; then
+      MTCHR="chrM"
+    elif [[ "$MTCHR" =~ ^chr ]]; then
+      :
+    else
+      MTCHR="chr${MTCHR}"
+    fi
   fi
   echo -e "${MTCHR}\t0\t16569\tMT_full" >> "$OUTBUF"
 fi
@@ -154,6 +177,8 @@ fi
 TOTAL_BP=$(awk '{s+=($3-$2)}END{print s+0}' "$OUTBUF")
 if [ "$GENOME" = "hg19" ]; then
   GENOME_BP=3095677412
+elif [ "$GENOME" = "chm13" ]; then
+  GENOME_BP=3117292070
 else
   GENOME_BP=3088269832
 fi
